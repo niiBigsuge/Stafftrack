@@ -1,0 +1,32 @@
+# Environment Variables & Secrets (Hard Rule 2)
+.env
+.env*.local
+.env.local
+.env.production
+.env.development
+
+# Node / Dependencies
+node_modules/
+.pnpm-store/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Next.js build output
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+tsconfig.tsbuildinfo
+
+# Dev-OS temporary backups
+.agents/_backup/
+
+# Dev-OS runtime session state
+.agents/memory/session.json
+.agents/memory/sdlc-state.json
+
+# Dev-OS local tool binaries (gitleaks installed by install-hooks.sh)
+.agents/bin/
+

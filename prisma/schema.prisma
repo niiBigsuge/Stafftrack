@@ -1,0 +1,133 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+enum Role {
+  SUPER_ADMIN
+  HR_ADMIN
+  MANAGER
+  STAFF
+  EXECUTIVE
+}
+
+enum AttendanceStatus {
+  PRESENT_ON_TIME
+  PRESENT_LATE
+  ABSENT
+  ON_LEAVE
+  HALF_DAY
+}
+
+enum RequestType {
+  LATE_EXCUSE
+  MISSING_CLOCK_IN
+  MISSING_CLOCK_OUT
+}
+
+enum RequestStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Department {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  managerId String?
+  users     User[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model User {
+  id                 String              @id @default(uuid())
+  email              String              @unique
+  passwordHash       String
+  fullName           String
+  employeeCode       String              @unique
+  role               Role                @default(STAFF)
+  departmentId       String?
+  department         Department?         @relation(fields: [departmentId], references: [id])
+  jobTitle           String?
+  isActive           Boolean             @default(true)
+  attendanceRecords  AttendanceRecord[]
+  attendanceRequests AttendanceRequest[] @relation("UserRequests")
+  reviewedRequests   AttendanceRequest[] @relation("ReviewedRequests")
+  auditActions       AuditLog[]          @relation("UserAudits")
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+
+  @@index([departmentId])
+  @@index([role])
+}
+
+model CompanyPolicy {
+  id                 String   @id @default(uuid())
+  workStartTime      String   @default("08:30:00") // Stored as HH:mm:ss
+  workEndTime        String   @default("17:00:00") // Stored as HH:mm:ss
+  graceMinutes       Int      @default(15)
+  workingDays        String   @default("[\"MON\",\"TUE\",\"WED\",\"THU\",\"FRI\"]") // JSON array string
+  updatedAt          DateTime @updatedAt
+}
+
+model AttendanceRecord {
+  id                 String              @id @default(uuid())
+  userId             String
+  user               User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  recordDate         DateTime            @db.Date
+  clockInTime        DateTime?
+  clockOutTime       DateTime?
+  status             AttendanceStatus
+  minutesLate        Int                 @default(0)
+  totalWorkMinutes   Int?
+  isExcused          Boolean             @default(false)
+  staffRemarks       String?             @db.Text
+  requests           AttendanceRequest[]
+  createdAt          DateTime            @default(now())
+  updatedAt          DateTime            @updatedAt
+
+  @@unique([userId, recordDate])
+  @@index([recordDate])
+  @@index([status])
+}
+
+model AttendanceRequest {
+  id            String            @id @default(uuid())
+  userId        String
+  user          User              @relation("UserRequests", fields: [userId], references: [id], onDelete: Cascade)
+  recordId      String?
+  record        AttendanceRecord? @relation(fields: [recordId], references: [id], onDelete: SetNull)
+  requestType   RequestType
+  requestedDate DateTime          @db.Date
+  proposedTime  DateTime?
+  reason        String            @db.Text
+  status        RequestStatus     @default(PENDING)
+  reviewerId    String?
+  reviewer      User?             @relation("ReviewedRequests", fields: [reviewerId], references: [id])
+  reviewerNote  String?           @db.Text
+  reviewedAt    DateTime?
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([userId])
+  @@index([status])
+}
+
+model AuditLog {
+  id           String   @id @default(uuid())
+  actorId      String
+  actor        User     @relation("UserAudits", fields: [actorId], references: [id])
+  action       String
+  targetEntity String
+  targetId     String
+  details      String?  @db.Text
+  createdAt    DateTime @default(now())
+
+  @@index([actorId])
+  @@index([targetEntity, targetId])
+}

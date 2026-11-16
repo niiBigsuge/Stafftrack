@@ -1,0 +1,309 @@
+{
+  "version": "5.1.2",
+  "platform": "antigravity",
+  "installedPacks": [
+    "core",
+    "nextjs"
+  ],
+  "hooksEnabled": true,
+  "telemetry": "on",
+  "mode": "interactive",
+  "goal": null,
+  "skills": {
+    "brainstorming": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "cffd7cdace3d7c805fa219312d041c98a58c4008e0734896ef05be258445a2f4",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.039Z",
+      "updatedAt": "2026-10-29T20:16:02.039Z"
+    },
+    "writing-plans": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "52c67922b0c8032271c3dd76a5830a63cb9c73c1cd8805b6ee653d723a593c21",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.134Z",
+      "updatedAt": "2026-10-29T20:16:02.134Z"
+    },
+    "spec-driven": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "adc3ccb5253112c739a39ecf825d616a0b337cf108dba19c959128078ec1426a",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.150Z",
+      "updatedAt": "2026-10-29T20:16:02.150Z"
+    },
+    "grill-me": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "2dadf5c9cc394e3a702b55d9a678c99dd72d15efe0306c43d9a5a3a7a63f39e3",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.196Z",
+      "updatedAt": "2026-10-29T20:16:02.196Z"
+    },
+    "autonomous-sdlc": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "3bc2a61132ab323fc33ef14c109445239d4c5cbad5bc4704e7ffbe2396a798ed",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.223Z",
+      "updatedAt": "2026-10-29T20:16:02.223Z"
+    },
+    "testing-guide": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "37c0deb63e73d8fb8822c554ee94cf87188c2a6a19291651ed639dd600fe1821",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.227Z",
+      "updatedAt": "2026-10-29T20:16:02.227Z"
+    },
+    "humanizer": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "1e9cd4ed509923073bdbcd41f82acde99a9b256d63ede44b568a586d6c765a15",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.230Z",
+      "updatedAt": "2026-10-29T20:16:02.230Z"
+    },
+    "anti-ai-ui": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "1060bf971bf8b64e03a5cb0190e306b85280567e8b628d3b80e8ace5544abc53",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.243Z",
+      "updatedAt": "2026-10-29T20:16:02.243Z"
+    },
+    "task-contract": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "15f62e6da1971a4a37fe9be7d407c9b7a54a22e990644145f41704cb6658a117",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.304Z",
+      "updatedAt": "2026-10-29T20:16:02.304Z"
+    },
+    "task-board": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "7e87acdbb3acb186a4773f8dbefd0d689f5292e60ea8ebed9b37ba485b2e3357",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.307Z",
+      "updatedAt": "2026-10-29T20:16:02.307Z"
+    },
+    "shared-memory": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "a2cd2664d2c9f63b6565aa6e8caf3d829fe98258260397c71bc482d8859e6b84",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.319Z",
+      "updatedAt": "2026-10-29T20:16:02.319Z"
+    },
+    "git-ops": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "369a937556e1360e0929033aa62305cf290cf14205ec2a577083621c34a5f58b",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.322Z",
+      "updatedAt": "2026-10-29T20:16:02.322Z"
+    },
+    "code-reviewer": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "243c5baaa1c260eff2df73ead434cbb485047aec0398eb7d07a36e35dd648580",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.339Z",
+      "updatedAt": "2026-10-29T20:16:02.339Z"
+    },
+    "human-checkpoint": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "2e44d72e2f217421ae6fa9b9068208beb7d707c30bae087a1ca0f21b4dca734e",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.342Z",
+      "updatedAt": "2026-10-29T20:16:02.342Z"
+    },
+    "token-optimization": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "8f0044b480a460e93864e869522ff2b86058d77d75d37a3a34a23c8015fcc2b4",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.345Z",
+      "updatedAt": "2026-10-29T20:16:02.345Z"
+    },
+    "deployment-checklist": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "39cf79b4009b8baba25dbb93f3db8bf62225184dd1c2c8bcc6a516cb45667629",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.347Z",
+      "updatedAt": "2026-10-29T20:16:02.347Z"
+    },
+    "project-requirements": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "4defc59c0fea9fefed42257500d6254eb4b74050ad8f1ef85d80d53123770ad9",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.349Z",
+      "updatedAt": "2026-10-29T20:16:02.349Z"
+    },
+    "stacks": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "12b46818580ec7039e6ee5e03eb56a907ec79e935ddb404db378ab27b7a530d5",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.361Z",
+      "updatedAt": "2026-10-29T20:16:02.361Z"
+    },
+    "qa": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "b46ee12074d42d30493454cd7b217177ee38cf2d1f6aefac6e6b24996bdb754a",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.381Z",
+      "updatedAt": "2026-10-29T20:16:02.381Z"
+    },
+    "security-review": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "e7bd66975ef6ebb8e1066416a3e9132c0fd95466d11b70c3e71e7018ba12d679",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.392Z",
+      "updatedAt": "2026-10-29T20:16:02.392Z"
+    },
+    "agent-browser": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "10802b11c4495ad3ed03149f6ab4b71b611980eeeaa0e1bd16500c12c7f0c3aa",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.841Z",
+      "updatedAt": "2026-10-29T20:16:02.841Z"
+    },
+    "telemetry": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "cf247beedf229bb8d322c9677d3569c4bff397d0b54f9ed92e89d6cff9594ce5",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.846Z",
+      "updatedAt": "2026-10-29T20:16:02.846Z"
+    },
+    "performance-engineer": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "fc35b8c6d2d2a5f17f15952aa2ec9b10fe9392f606937ffca9ece644c9731102",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.850Z",
+      "updatedAt": "2026-10-29T20:16:02.850Z"
+    },
+    "nextjs-developer": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "77c09e63656c064fdf5a77fef86dd57fdc54f8c27ee74ed74f7b8fa79ef497ee",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:02.864Z",
+      "updatedAt": "2026-10-29T20:16:02.864Z"
+    },
+    "vercel-react-best-practices": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "7a48c0be8fab601995a42fa67fc9db6cefaef51d0a7987b7ecd9fa6b3d810f28",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:03.033Z",
+      "updatedAt": "2026-10-29T20:16:03.033Z"
+    },
+    "vercel-composition-patterns": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "3234908b149e8e4720ca28191e3693191cecfcd959da675ded1a9a46610f4205",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:03.823Z",
+      "updatedAt": "2026-10-29T20:16:03.823Z"
+    },
+    "vercel-react-view-transitions": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "eed51935ea08915d510371f767ead4482a46261573446eef87fcd0988e48babc",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:03.966Z",
+      "updatedAt": "2026-10-29T20:16:03.966Z"
+    },
+    "vercel-optimize": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "1e154910bd64e367076c00286c99f9cd3b6eb6a4ee25cb6f08694da9b84dd4de",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:04.090Z",
+      "updatedAt": "2026-10-29T20:16:04.090Z"
+    },
+    "deploy-to-vercel": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "c545a66a7e8be62eca084e9d37cd31137f8122d17e3f431f01df47ee3426e12e",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:05.882Z",
+      "updatedAt": "2026-10-29T20:16:05.882Z"
+    },
+    "shadcn-ui": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "3fdf143aba2cb8dbbe027876da9df1dadeab9f8006f5366fe8d727588971da4e",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:05.940Z",
+      "updatedAt": "2026-10-29T20:16:05.940Z"
+    },
+    "supabase": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "b04216fb80845511d207448c282da393f86d785aff5b0d68e756376876594363",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:06.055Z",
+      "updatedAt": "2026-10-29T20:16:06.055Z"
+    },
+    "supabase-postgres-best-practices": {
+      "source": "core",
+      "version": "5.1.2",
+      "hash": "ed828f0e8dda9879ab570dcc7c3006c617983b64af2f1f1dc10507533b1db29f",
+      "customized": false,
+      "installedAt": "2026-10-29T20:16:06.084Z",
+      "updatedAt": "2026-10-29T20:16:06.084Z"
+    }
+  },
+  "updatedAt": "2026-10-29T20:16:06.569Z",
+  "generatedFiles": {
+    ".agents/agents/architect.md": "749bd61f4595d2e57839e49ccac067cf8421c331eb8f4e054e58af028e44d10d",
+    ".agents/agents/dba.md": "89dcecefb682259644f0d2d2b59317bbaeab6d92937f1a415f09de76b4d3dd96",
+    ".agents/agents/developer.md": "8165d7d0b72dc1b56e00a6f502eae7c31a4baef70331583635d92b980b20b965",
+    ".agents/agents/devops.md": "48d634bd1b419e7abea66804ac062bc656613b71d88e39d43b41d7331e618c00",
+    ".agents/agents/orchestrator.md": "97d6ea6e6ccd2502b7d07a15e65de197da9434c827755bcdbde176de62e1d9da",
+    ".agents/agents/pm.md": "2eef2ec8fbebf36f48f4eb53a8c3fa73654cfb1cb85036652e803ff29854d021",
+    ".agents/agents/qa.md": "ccfef3a5aa571b3d399aa720ffae30fdedacb12f97b8c7212719c5decc6fbf5c",
+    ".agents/agents/researcher.md": "f51ea9351b5288f2bd5b916800b74125342d971531c25fd20ba7a9570b8f7e2b",
+    ".agents/agents/security.md": "69e2ffbf92cdd72cad679b5e01be7f5d1460482a4333705173f11e602948bbdf",
+    ".agents/agents/tech-lead.md": "f717d1355b4a8c1efce9f831c401b9cf8e3a92b75397abb3931098ceafca143f",
+    ".agents/agents/tech-writer.md": "53f154c8fd7633954f9385afbe7046c2d9cb5beb6fcc2c0500177c5976dc4bd6",
+    ".agents/agents/tester.md": "93446c871185ccb8a03a068f0a9bfc99d10463a1e226d89599a79ad38be70e63",
+    ".agents/agents/ui-designer.md": "edc18f3d2e54962aeab7032d43cc782b857b0b1c71d9921283239fd8792a99a5",
+    ".agents/commands/architect.md": "7e4dc4e561081eb6f49b7d43a2c5ffbbc3c22c3b4cc01236a23102bdce3d3ca8",
+    ".agents/commands/auto.md": "11931c50517d4a48b250d09a399ea6fafa2f1d997a5a447d459f23a1f733c26d",
+    ".agents/commands/commit.md": "7a76aee23acbc69c8e26148804401baf19a80439cea5aba9b6bbc5a36ee3b65c",
+    ".agents/commands/deploy.md": "ae21fe7436a39f5f62d55e40d90fcf9fb762eb4ba5a346064cefd2b3c4b6d36d",
+    ".agents/commands/design.md": "4f715db432f73d65390a50e47185c87c4a0f3b2145b4db0aaa7dad235f705320",
+    ".agents/commands/fix.md": "3e4df290e0e69816f78ca96ef4db65015c50835253910e8c12e1290077d6376b",
+    ".agents/commands/humanize.md": "12ce96a5faad312203927843254df3f87f8fc34b321283e87597438bc8cb0770",
+    ".agents/commands/mode.md": "c24d2a9c32fbcd986ca4b498875393a9512ffa894dd15933ecbbd62f0d7d7ea0",
+    ".agents/commands/pm.md": "1c8c01b9d81a23bfe8f3afa654f0acebd2260dcd351c2ec3eb8b456bea74aa25",
+    ".agents/commands/redesign.md": "6f8cade38280c32077becc17e2d74d8cbf1d1af2237d695a3d66c4890e6c5bdb",
+    ".agents/commands/refactor.md": "e1207d547a1f6ed254984b833d276a6dd93e52c6c9788839a629c6f748c6d509",
+    ".agents/commands/research.md": "5626b01b3564007aea0e2f91524ba9cfb91e55df0566be2c33d3dfdfa582529a",
+    ".agents/commands/review.md": "ecaf23db4229876bbf82bef55f5926684812e15cba2bd5b3a48cf87699ac01b7",
+    ".agents/commands/secure.md": "49cc70a6858e4c717522c0a4bdf5efe19854dd6e2e0e55585c885235d439c2ba",
+    ".agents/commands/skill.md": "0f2d26cfeae4b61f4f102fb5b4cc0c44a752577340919d1fcd30cff672eea29a",
+    ".agents/commands/spec.md": "f9d74604271094293afcf983e1443416f365370e9e914578fb14fd2ad6abd713",
+    ".agents/commands/sre.md": "e15bf1da87344b05da5ef29be967dcd9a738e5072be141e7292b0c9d7cb1524c",
+    ".agents/commands/status.md": "5d381e839c1cffe9abf40015920a74d2799a40e502d47cfeaf35c7d91936f592",
+    ".agents/commands/task.md": "47a49aa60c9972557daa7b7d0329c1f54f10a3ba59027c8523156b5a6d982c71",
+    ".agents/commands/tech-lead.md": "5f8f0590ece510bda1c2dba2f3829906d09a463265a387cf58a1c1d6591fb2b9",
+    ".agents/commands/tech-writer.md": "bda1ca5d00c08929fea63e0cdd98d0bddd32cb7919bef6beea23d8a2f85fecad",
+    ".agents/commands/test.md": "f5e5abfe4677e373030bf0599d7bf2c41227d2b96bdf9a7c86d0eddeafc4d72a"
+  },
+  "commitPolicy": "human"
+}
