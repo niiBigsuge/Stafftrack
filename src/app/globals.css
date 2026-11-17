@@ -27,3 +27,55 @@ body {
 .btn-tactile:active {
   transform: scale(0.98);
 }
+
+/* Dedicated Executive Print Media Styles (TASK-V2-009) */
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 12mm 15mm;
+  }
+
+  /* Hide navigation, actions, interactive buttons during print */
+  header,
+  nav,
+  .no-print,
+  button,
+  a[download] {
+    display: none !important;
+  }
+
+  body {
+    background: #ffffff !important;
+    color: #000000 !important;
+    font-size: 11pt !important;
+  }
+
+  .print-only {
+    display: block !important;
+  }
+
+  /* Force borders and prevent breaking inside table rows and cards */
+  .border,
+  table,
+  th,
+  td {
+    border-color: #cbd5e1 !important;
+  }
+
+  tr,
+  .rounded-xl {
+    page-break-inside: avoid;
+    break-inside: avoid;
+  }
+
+  /* Remove drop shadows for clean print rendering */
+  .shadow-sm,
+  .shadow-xl,
+  .shadow-md {
+    box-shadow: none !important;
+  }
+}
+
+.print-only {
+  display: none;
+}

@@ -3,38 +3,37 @@
 > This file is maintained by the Orchestrator agent. It is updated at each phase transition to preserve context across long sessions.
 
 ## Current Task
-- **Task:** STAFFTRACK-V2-FULL-DELIVERY Complete v2 Evolution
+- **Task:** TASK-V2-009 Printable PDF Report View & Print Media Stylesheet
 - **Branch:** feat/stafftrack-v2
 - **Triage Level:** STANDARD
-- **Status:** HUMAN_CHECKPOINT. Plan steps 1-7 and 9 delivered. Step 8 CSV & Excel exports delivered with injection sanitization; PDF view deferred to TASK-V2-009. Navbar routes, security checks (timing-safe cron token, reviewer self-approval block, department head scoping, export injection defense), and all mechanical scanners passed. Ready for human commit approval.
+- **Status:** HUMAN_CHECKPOINT — Printable report view delivered. Ready for review and commit prior to master merge.
 - **Assignee:** Orchestrator / Human
 
 ## Active Agents
 | Agent | Status | Current Assignment |
 |---|---|---|
 | Orchestrator | ACTIVE | Staged review presentation & commit guidance |
-| QA | PASSED | tsc --noEmit (0 errors), vitest (9/9 passed), ui-taste-check (24/24 clean) |
-| Security | PASSED | Timing-safe CRON_SECRET, CSV/Excel injection defense, self-approval prevention, department scoping |
-| DevOps | STANDBY | Ready for commit command execution |
+| QA | PASSED | tsc --noEmit (0 errors), vitest (9/9 passed), ui-taste-check (25/25 clean) |
+| DevOps | STANDBY | Ready for commit and master merge |
 
 ## Blockers
-- None. Full test suite passing, all mechanical scanners clean, 0 compile errors.
+- None. Clean working tree on `feat/stafftrack-v2`.
 
 ## Context Summary
-1. **Initial Commit Landed:** Commit `fd47f7e` (`chore: initial commit of StaffTrack v1 app and v2 PRD`) recorded on master on 2026-11-16.
-2. **Approved Specs:** `docs/specs/2026-10-30-stafftrack-prd-v2.md`.
-3. **Implementation Plan:** `docs/plans/2026-11-16-stafftrack-v2-implementation.md`. Delivered so far:
-   - Database schema widened and migrated for 5 roles and multi-day leave.
-   - Strict GMT punctuality logic (Option B, floor rounding from the 08:35 cutoff).
-   - Session handling no longer falls back to a default secret.
-   - Reconciliation cron route secured with a bearer token, with leave and field duty taking precedence over absence.
-   - Leave notice and field duty modal on the dashboard.
-   - Department administration page for heads and member allocation.
-   - HR Director overview page with a department leaderboard.
-   - CSV and multi-sheet Excel export, with formula injection defence in the Excel route.
-4. **Dependencies:** `exceljs` added (189 transitive packages). The owner approved it under R12 on 2026-11-16. `npm audit --omit=dev` reports critical advisories in `next` and `@auth/core` that predate this work; they will be handled as a separate dependency-update task.
-5. **Mechanical checks (not a substitute for the QA/Security gate):**
-   - Unit tests: 9/9 passing (`npx vitest run`).
+1. **Initial Commit Landed:** Commit `fd47f7e` (`chore: initial commit of StaffTrack v1 app and v2 PRD`) on master.
+2. **v2 Core Delivery Landed:** Commit `09f0922` (`feat: StaffTrack v2 5-tier roles, GMT punctuality, leave workflow, and multi-format exports`) on `feat/stafftrack-v2`.
+3. **Approved Specs:** `docs/specs/2026-10-30-stafftrack-prd-v2.md` fully implemented.
+4. **Delivered Features:**
+   - 5-tier role model (`STAFF`, `DEPARTMENT_HEAD`, `HR_OFFICER`, `HR_DIRECTOR`, `SYSTEM_ADMIN`).
+   - Strict GMT punctuality calculation (Option B: floor rounding from 08:35:00 cutoff).
+   - Insecure session fallbacks eliminated; `NEXTAUTH_SECRET` enforced.
+   - Timing-safe authenticated reconciliation cron (`/api/cron/reconcile`) with precedence (`ON_LEAVE` ➔ `FIELD_DUTY` ➔ `ABSENT`).
+   - Multi-day leave notice and field duty workflow on staff dashboard.
+   - Department administration portal at `/admin/departments` with Navbar links.
+   - Executive director suite at `/director` (with `/ceo` redirect).
+   - Multi-format exports with formula-injection sanitization for both CSV and Excel (`exceljs`).
+5. **Quality gates verified:**
+   - Vitest suite: 9/9 passing.
    - Typecheck: 0 errors (`tsc --noEmit`).
-   - Scanners: env-check, db-check, ui-taste-check, and humanize-check passed.
+   - Scanners: env-check, ui-taste-check, humanize-check all passed pre-commit.
 

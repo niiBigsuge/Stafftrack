@@ -1,7 +1,8 @@
 import { requireRole } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { Role } from "@prisma/client";
-import { BarChart3, Download, Award, TrendingUp, AlertTriangle, Building2, CheckCircle2 } from "lucide-react";
+import { PrintReportButton } from "@/components/PrintReportButton";
+import { BarChart3, Download, Award, TrendingUp, AlertTriangle, Building2, CheckCircle2, Clock } from "lucide-react";
 
 export default async function ReportsPage() {
   await requireRole([Role.SYSTEM_ADMIN, Role.HR_OFFICER, Role.HR_DIRECTOR, Role.DEPARTMENT_HEAD]);
@@ -59,6 +60,24 @@ export default async function ReportsPage() {
 
   return (
     <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8 space-y-8">
+      {/* Formal Header for Printed / Exported PDF Document */}
+      <div className="print-only border-b-2 border-slate-900 pb-4 mb-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <h1 className="text-xl font-bold tracking-tight text-slate-950 uppercase">
+              StaffTrack — Executive Punctuality & Attendance Audit Report
+            </h1>
+            <p className="text-xs text-slate-600 mt-1">
+              Official Departmental Performance Benchmarks • Timezone: GMT (UTC+0)
+            </p>
+          </div>
+          <div className="text-right text-xs text-slate-600">
+            <div>Generated: {new Date().toISOString().split("T")[0]}</div>
+            <div className="font-mono text-[10px] text-slate-500">Confidential Internal Document</div>
+          </div>
+        </div>
+      </div>
+
       {/* Header & Export Action */}
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-slate-200 pb-5">
         <div>
@@ -72,6 +91,7 @@ export default async function ReportsPage() {
         </div>
 
         <div className="flex flex-wrap items-center gap-3">
+          <PrintReportButton />
           <a
             href="/api/export/csv"
             download

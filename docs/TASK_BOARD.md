@@ -20,25 +20,25 @@
 ## Active Board
 
 ### [ HUMAN_CHECKPOINT ]
-- **STAFFTRACK-V2-FULL-DELIVERY:** v1 to v2 evolution (`docs/plans/2026-11-16-stafftrack-v2-implementation.md`), plan steps 1-7 and 9, plus CSV and Excel export from step 8
+*(none)*
+
+### [ HUMAN_CHECKPOINT ]
+- **TASK-V2-009:** Printable PDF Report View & Print Media Stylesheet (`src/app/admin/reports/page.tsx`, `src/components/PrintReportButton.tsx`, `src/app/globals.css`)
   - Assignee: Human / Orchestrator
-  - Hardening completed:
-    - Added `/admin/departments` link in Navbar for HR Officer and System Admin
-    - Fixed CSV export formula injection sanitization matching Excel export
-    - Added constant-time timing-safe comparison (`crypto.timingSafeEqual`) for `CRON_SECRET`
-    - Prevented self-approval of requests by reviewers
-    - Scoped department heads with null `departmentId` from seeing org-wide requests or exports
-  - Mechanical checks: tsc 0 errors, vitest 9/9, ui-taste (24/24), env, db, and humanize scanners passed
-  - Dependency: `exceljs` approved by the owner under R12 on 2026-11-16
+  - Delivered:
+    - Dedicated `@media print` CSS rules in `src/app/globals.css` (page sizing, hiding headers/buttons/navbars, border clarity, preventing page break inside table rows)
+    - `PrintReportButton.tsx` added to `/admin/reports` with one-click print preview and save-as-PDF capability
+    - Formal executive audit print header with GMT reference and generation timestamp
+  - Quality verification: tsc (0 errors), vitest (9/9 pass), ui-taste-check (25/25 clean), humanizer (clean)
 
 ### [ IN_PROGRESS ]
 *(none)*
 
 ### [ QUEUED ]
-- **TASK-V2-009:** Printable PDF report view (deferred from plan step 8)
 - **TASK-DEP-001:** Dependency update for critical `next` and `@auth/core` advisories (Researcher, Developer, Tester, Security)
 
 ### [ DONE ]
+- **STAFFTRACK-V2-FULL-DELIVERY:** v1 to v2 evolution (`docs/plans/2026-11-16-stafftrack-v2-implementation.md`), plan steps 1-7 and 9, plus CSV and Excel export from step 8. Landed under commit `09f0922`.
 - **TASK-V2-001:** Database Baseline & Prisma Schema Evolution (`prisma/schema.prisma`, `prisma/seed.ts`) [CRITICAL]
 - **TASK-V2-002:** Strict GMT Punctuality Engine & Test-First Suite (`src/lib/punctuality.ts`, `src/lib/punctuality.test.ts`)
 - **TASK-V2-003:** Session Auth & 5-Tier Role Route Guards (`src/lib/session.ts`, `src/app/actions/auth.ts`, `src/components/Navbar.tsx`)
@@ -46,7 +46,7 @@
 - **TASK-V2-005:** Leave Notices & Field Duty Workflow (`src/components/LeaveNoticeModal.tsx`, `src/app/actions/attendance.ts`)
 - **TASK-V2-006:** Department Management & Role Administration UI (`src/app/admin/departments/page.tsx`, `src/app/actions/admin.ts`)
 - **TASK-V2-007:** HR Director Executive Overview Portal (`src/app/director/page.tsx`, `src/components/Navbar.tsx`)
-- **TASK-V2-008:** Multi-Format Export Engine with Exceljs & PDF (`src/app/api/export/excel/route.ts`)
+- **TASK-V2-008:** Multi-Format Export Engine with Exceljs & CSV (`src/app/api/export/excel/route.ts`, `src/app/api/export/csv/route.ts`)
 
 ### [ BACKLOG ]
 *(none)*
