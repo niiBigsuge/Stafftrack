@@ -23,13 +23,12 @@
 *(none)*
 
 ### [ HUMAN_CHECKPOINT ]
-- **TASK-V2-009:** Printable PDF Report View & Print Media Stylesheet (`src/app/admin/reports/page.tsx`, `src/components/PrintReportButton.tsx`, `src/app/globals.css`)
-  - Assignee: Human / Orchestrator
-  - Delivered:
-    - Dedicated `@media print` CSS rules in `src/app/globals.css` (page sizing, hiding headers/buttons/navbars, border clarity, preventing page break inside table rows)
-    - `PrintReportButton.tsx` added to `/admin/reports` with one-click print preview and save-as-PDF capability
-    - Formal executive audit print header with GMT reference and generation timestamp
-  - Quality verification: tsc (0 errors), vitest (9/9 pass), ui-taste-check (25/25 clean), humanizer (clean)
+- **STAFFTRACK-V2-MERGE-REVIEW:** Final review of `feat/stafftrack-v2` ahead of merge into `master`.
+  - Commits:
+    - `09f0922`: `feat: StaffTrack v2 5-tier roles, GMT punctuality, leave workflow, and multi-format exports`
+    - `43bed6c`: `feat: add executive printable PDF report view and print stylesheet`
+  - Total changes: 36 files (+4,548 / -705 lines)
+  - Gates: tsc (0 errors), vitest (9/9 pass), all mechanical checks clean
 
 ### [ IN_PROGRESS ]
 *(none)*
@@ -38,6 +37,7 @@
 - **TASK-DEP-001:** Dependency update for critical `next` and `@auth/core` advisories (Researcher, Developer, Tester, Security)
 
 ### [ DONE ]
+- **TASK-V2-009:** Printable PDF Report View & Print Media Stylesheet (`src/app/admin/reports/page.tsx`, `src/components/PrintReportButton.tsx`, `src/app/globals.css`). Landed under commit `43bed6c`.
 - **STAFFTRACK-V2-FULL-DELIVERY:** v1 to v2 evolution (`docs/plans/2026-11-16-stafftrack-v2-implementation.md`), plan steps 1-7 and 9, plus CSV and Excel export from step 8. Landed under commit `09f0922`.
 - **TASK-V2-001:** Database Baseline & Prisma Schema Evolution (`prisma/schema.prisma`, `prisma/seed.ts`) [CRITICAL]
 - **TASK-V2-002:** Strict GMT Punctuality Engine & Test-First Suite (`src/lib/punctuality.ts`, `src/lib/punctuality.test.ts`)
