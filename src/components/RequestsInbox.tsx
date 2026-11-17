@@ -8,7 +8,9 @@ import type { RequestStatus, RequestType } from "@/types";
 interface RequestItem {
   id: string;
   requestType: RequestType;
-  requestedDate: Date;
+  requestedDate: Date | null;
+  startDate?: Date | null;
+  endDate?: Date | null;
   proposedTime: Date | null;
   reason: string;
   status: RequestStatus;
@@ -39,7 +41,8 @@ export function RequestsInbox({
     setProcessingId(null);
   };
 
-  const formatDate = (date: Date) => {
+  const formatDate = (date: Date | null | undefined) => {
+    if (!date) return "--";
     return new Date(date).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
@@ -83,7 +86,11 @@ export function RequestsInbox({
                         Type: <span className="rounded bg-slate-100 px-1.5 py-0.5 font-mono">{req.requestType}</span>
                       </span>
                       <span>•</span>
-                      <span>Target Date: <strong className="text-slate-900">{formatDate(req.requestedDate)}</strong></span>
+                      {req.startDate && req.endDate ? (
+                        <span>Range: <strong className="text-slate-900">{formatDate(req.startDate)} - {formatDate(req.endDate)}</strong></span>
+                      ) : (
+                        <span>Target Date: <strong className="text-slate-900">{formatDate(req.requestedDate || req.startDate)}</strong></span>
+                      )}
                       {req.proposedTime && (
                         <>
                           <span>•</span>

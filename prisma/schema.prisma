@@ -8,11 +8,11 @@ generator client {
 }
 
 enum Role {
-  SUPER_ADMIN
-  HR_ADMIN
-  MANAGER
   STAFF
-  EXECUTIVE
+  DEPARTMENT_HEAD
+  HR_OFFICER
+  HR_DIRECTOR
+  SYSTEM_ADMIN
 }
 
 enum AttendanceStatus {
@@ -20,6 +20,7 @@ enum AttendanceStatus {
   PRESENT_LATE
   ABSENT
   ON_LEAVE
+  FIELD_DUTY
   HALF_DAY
 }
 
@@ -27,6 +28,8 @@ enum RequestType {
   LATE_EXCUSE
   MISSING_CLOCK_IN
   MISSING_CLOCK_OUT
+  LEAVE_NOTICE
+  FIELD_ASSIGNMENT
 }
 
 enum RequestStatus {
@@ -70,8 +73,10 @@ model CompanyPolicy {
   id                 String   @id @default(uuid())
   workStartTime      String   @default("08:30:00") // Stored as HH:mm:ss
   workEndTime        String   @default("17:00:00") // Stored as HH:mm:ss
-  graceMinutes       Int      @default(15)
+  graceMinutes       Int      @default(5)
   workingDays        String   @default("[\"MON\",\"TUE\",\"WED\",\"THU\",\"FRI\"]") // JSON array string
+  timezone           String   @default("GMT")
+  hrContactPhone     String   @default("+233 20 000 0000")
   updatedAt          DateTime @updatedAt
 }
 
@@ -103,7 +108,9 @@ model AttendanceRequest {
   recordId      String?
   record        AttendanceRecord? @relation(fields: [recordId], references: [id], onDelete: SetNull)
   requestType   RequestType
-  requestedDate DateTime          @db.Date
+  requestedDate DateTime?         @db.Date
+  startDate     DateTime?         @db.Date
+  endDate       DateTime?         @db.Date
   proposedTime  DateTime?
   reason        String            @db.Text
   status        RequestStatus     @default(PENDING)

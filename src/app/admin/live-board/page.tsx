@@ -5,10 +5,10 @@ import { LiveRoster } from "@/components/LiveRoster";
 import { Users, Clock, CheckCircle2, AlertTriangle, XCircle, UserCheck } from "lucide-react";
 
 export default async function LiveBoardPage() {
-  const session = await requireRole([Role.SUPER_ADMIN, Role.HR_ADMIN, Role.EXECUTIVE, Role.MANAGER]);
+  const session = await requireRole([Role.SYSTEM_ADMIN, Role.HR_OFFICER, Role.HR_DIRECTOR, Role.DEPARTMENT_HEAD]);
 
   let userDeptName: string | null = null;
-  if (session.role === "MANAGER" && session.departmentId) {
+  if (session.role === "DEPARTMENT_HEAD" && session.departmentId) {
     const dept = await prisma.department.findUnique({
       where: { id: session.departmentId },
     });

@@ -3,10 +3,31 @@ import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/session";
 import { Role } from "@prisma/client";
 
+// Sanitize CSV formula injection (=, +, -, @, \t, \r)
+function sanitizeCsvCell(val: string | null | undefined): string {
+  if (!val) return "";
+  let str = String(val).replace(/"/g, '""');
+  if (/^[=\+\-@\t\r]/.test(str)) {
+    str = `'${str}`;
+  }
+  return `"${str}"`;
+}
+
 export async function GET(req: NextRequest) {
   const session = await getSession();
-  if (!session || (session.role !== Role.SUPER_ADMIN && session.role !== Role.HR_ADMIN && session.role !== Role.EXECUTIVE && session.role !== Role.MANAGER)) {
+  if (
+    !session ||
+    (session.role !== Role.SYSTEM_ADMIN &&
+      session.role !== Role.HR_OFFICER &&
+      session.role !== Role.HR_DIRECTOR &&
+      session.role !== Role.DEPARTMENT_HEAD)
+  ) {
     return new NextResponse("Unauthorized", { status: 401 });
+  }
+
+  // If DEPARTMENT_HEAD has no department assigned, prevent org-wide leakage
+  if (session.role === Role.DEPARTMENT_HEAD && !session.departmentId) {
+    return new NextResponse("Department Head is not assigned to any department.", { status: 403 });
   }
 
   const { searchParams } = new URL(req.url);
@@ -14,12 +35,25 @@ export async function GET(req: NextRequest) {
   const toParam = searchParams.get("to");
 
   const dateFilter: any = {};
-  if (fromParam) dateFilter.gte = new Date(fromParam);
-  if (toParam) dateFilter.lte = new Date(toParam);
+  if (fromParam) {
+    const fromDate = new Date(fromParam);
+    if (!isNaN(fromDate.getTime())) dateFilter.gte = fromDate;
+  }
+  if (toParam) {
+    const toDate = new Date(toParam);
+    if (!isNaN(toDate.getTime())) dateFilter.lte = toDate;
+  }
+
+  // If DEPARTMENT_HEAD, restrict records strictly to own department (Finding M2)
+  const departmentFilter =
+    session.role === Role.DEPARTMENT_HEAD && session.departmentId
+      ? { user: { departmentId: session.departmentId } }
+      : {};
 
   const records = await prisma.attendanceRecord.findMany({
     where: {
       ...(Object.keys(dateFilter).length > 0 ? { recordDate: dateFilter } : {}),
+      ...departmentFilter,
     },
     include: {
       user: {
@@ -52,10 +86,10 @@ export async function GET(req: NextRequest) {
     const dateStr = new Date(r.recordDate).toISOString().split("T")[0];
 
     return [
-      `"${r.user.employeeCode}"`,
-      `"${r.user.fullName}"`,
-      `"${r.user.department?.name || "General"}"`,
-      `"${r.user.jobTitle || ""}"`,
+      sanitizeCsvCell(r.user.employeeCode),
+      sanitizeCsvCell(r.user.fullName),
+      sanitizeCsvCell(r.user.department?.name || "General"),
+      sanitizeCsvCell(r.user.jobTitle || ""),
       `"${dateStr}"`,
       `"${inTime}"`,
       `"${outTime}"`,
@@ -63,7 +97,7 @@ export async function GET(req: NextRequest) {
       r.minutesLate,
       r.isExcused ? "YES" : "NO",
       hours,
-      `"${(r.staffRemarks || "").replace(/"/g, '""')}"`,
+      sanitizeCsvCell(r.staffRemarks || ""),
     ].join(",");
   });
 

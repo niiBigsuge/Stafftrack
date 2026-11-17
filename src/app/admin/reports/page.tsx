@@ -4,7 +4,7 @@ import { Role } from "@prisma/client";
 import { BarChart3, Download, Award, TrendingUp, AlertTriangle, Building2, CheckCircle2 } from "lucide-react";
 
 export default async function ReportsPage() {
-  await requireRole([Role.SUPER_ADMIN, Role.HR_ADMIN, Role.EXECUTIVE, Role.MANAGER]);
+  await requireRole([Role.SYSTEM_ADMIN, Role.HR_OFFICER, Role.HR_DIRECTOR, Role.DEPARTMENT_HEAD]);
 
   // Fetch all departments
   const departments = await prisma.department.findMany({
@@ -71,14 +71,22 @@ export default async function ReportsPage() {
           </p>
         </div>
 
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap items-center gap-3">
           <a
             href="/api/export/csv"
             download
-            className="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2 text-xs font-semibold text-white shadow-sm hover:bg-slate-800 btn-tactile transition"
+            className="inline-flex items-center gap-2 rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-xs font-semibold text-slate-800 shadow-sm hover:bg-slate-50 btn-tactile transition"
           >
-            <Download className="h-4 w-4" aria-hidden="true" />
-            <span>Export Payroll CSV</span>
+            <Download className="h-4 w-4 text-slate-600" aria-hidden="true" />
+            <span>Export CSV</span>
+          </a>
+          <a
+            href="/api/export/excel"
+            download
+            className="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-4 py-2.5 text-xs font-semibold text-white shadow-sm hover:bg-slate-800 btn-tactile transition"
+          >
+            <Download className="h-4 w-4 text-emerald-400" aria-hidden="true" />
+            <span>Export Multi-Sheet Excel</span>
           </a>
         </div>
       </div>

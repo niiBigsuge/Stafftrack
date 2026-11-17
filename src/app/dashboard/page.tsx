@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { ClockCard } from "@/components/ClockCard";
 import { AttendanceTable } from "@/components/AttendanceTable";
 import { StaffRequestsList } from "@/components/StaffRequestsList";
+import { LeaveNoticeTrigger } from "@/components/LeaveNoticeTrigger";
 import { CheckCircle2, AlertTriangle, XCircle, Award, ListChecks, Users, ArrowRight } from "lucide-react";
 
 export default async function DashboardPage() {
@@ -19,8 +20,10 @@ export default async function DashboardPage() {
       id: "default-policy",
       workStartTime: "08:30:00",
       workEndTime: "17:00:00",
-      graceMinutes: 15,
+      graceMinutes: 5,
       workingDays: JSON.stringify(["MON", "TUE", "WED", "THU", "FRI"]),
+      timezone: "GMT",
+      hrContactPhone: "+233 20 000 0000",
       updatedAt: new Date(),
     };
   }
@@ -70,16 +73,19 @@ export default async function DashboardPage() {
       <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
         <div>
           <h1 className="text-2xl font-bold tracking-tight text-slate-950">
-            {session.role === "MANAGER" ? "Manager Attendance & Team Workspace" : "Staff Attendance Portal"}
+            {session.role === "DEPARTMENT_HEAD" ? "Department Head Attendance & Team Workspace" : "Staff Attendance Portal"}
           </h1>
           <p className="mt-1 text-sm text-slate-600">
             Welcome back, <strong className="text-slate-900">{session.fullName}</strong> • Employee Code: <span className="font-mono text-xs">{session.employeeCode}</span>
           </p>
         </div>
+        <div>
+          <LeaveNoticeTrigger />
+        </div>
       </div>
 
-      {/* Manager Direct Team Roster Quick Access */}
-      {session.role === "MANAGER" && (
+      {/* Department Head Direct Team Roster Quick Access */}
+      {session.role === "DEPARTMENT_HEAD" && (
         <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 rounded-xl border border-slate-200 bg-slate-50/75 p-4 shadow-sm">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-slate-900 text-white shadow-sm">

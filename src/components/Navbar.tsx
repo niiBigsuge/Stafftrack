@@ -10,6 +10,7 @@ import {
   ShieldCheck,
   History,
   TrendingUp,
+  Building2,
 } from "lucide-react";
 
 export async function Navbar() {
@@ -18,11 +19,11 @@ export async function Navbar() {
   if (!session) return null;
 
   const role = session.role;
-  const isManager = role === "MANAGER";
-  const isStaffOrManager = role === "STAFF" || role === "MANAGER";
-  const isHRAdmin = role === "HR_ADMIN";
-  const isExecutive = role === "EXECUTIVE";
-  const isSuperAdmin = role === "SUPER_ADMIN";
+  const isDepartmentHead = role === "DEPARTMENT_HEAD";
+  const isHROfficer = role === "HR_OFFICER";
+  const isHRDirector = role === "HR_DIRECTOR";
+  const isSystemAdmin = role === "SYSTEM_ADMIN";
+  const isStaff = role === "STAFF";
 
   return (
     <header className="sticky top-0 z-40 w-full border-b border-slate-200 bg-white/95 backdrop-blur">
@@ -30,7 +31,17 @@ export async function Navbar() {
         {/* Brand */}
         <div className="flex items-center gap-6">
           <Link
-            href={isExecutive ? "/ceo" : isSuperAdmin ? "/admin/settings" : "/dashboard"}
+            href={
+              isHRDirector
+                ? "/director"
+                : isSystemAdmin
+                ? "/admin/settings"
+                : isHROfficer
+                ? "/hr/requests"
+                : isDepartmentHead
+                ? "/manager/requests"
+                : "/dashboard"
+            }
             className="flex items-center gap-2.5 font-semibold text-slate-900"
           >
             <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-slate-900 text-white shadow-sm">
@@ -44,8 +55,8 @@ export async function Navbar() {
 
           {/* Navigation Links tailored per Portal & Role */}
           <nav className="hidden md:flex items-center gap-1">
-            {/* Staff Portal (Staff, Managers, HR Director) */}
-            {!isExecutive && (
+            {/* Staff Portal (Staff, Department Heads, HR Officers, HR Directors) */}
+            {!isSystemAdmin && (
               <Link
                 href="/dashboard"
                 className="rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors"
@@ -54,19 +65,30 @@ export async function Navbar() {
               </Link>
             )}
 
-            {/* CEO Executive Suite */}
-            {isExecutive && (
+            {/* Department Head Team Queue */}
+            {isDepartmentHead && (
               <Link
-                href="/ceo"
+                href="/manager/requests"
                 className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors"
               >
-                <TrendingUp className="h-4 w-4 text-slate-600" aria-hidden="true" />
-                <span>CEO Executive Suite</span>
+                <Inbox className="h-4 w-4 text-slate-600" aria-hidden="true" />
+                <span>Team Requests</span>
               </Link>
             )}
 
-            {/* HR Director Portals (Routine Attendance Approval Inbox & Audit) */}
-            {isHRAdmin && (
+            {/* HR Director Strategic Overview */}
+            {isHRDirector && (
+              <Link
+                href="/director"
+                className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+              >
+                <TrendingUp className="h-4 w-4 text-slate-600" aria-hidden="true" />
+                <span>Executive Director Suite</span>
+              </Link>
+            )}
+
+            {/* HR Officer Portals (Company Approval Inbox & Audit) */}
+            {isHROfficer && (
               <>
                 <Link
                   href="/hr/requests"
@@ -86,19 +108,19 @@ export async function Navbar() {
               </>
             )}
 
-            {/* Live Attendance Roster (Manager, HR Director, Super Admin, CEO) */}
-            {(isHRAdmin || isExecutive || isSuperAdmin || isManager) && (
+            {/* Live Attendance Roster */}
+            {!isStaff && (
               <Link
                 href="/admin/live-board"
                 className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors"
               >
                 <Users className="h-4 w-4 text-slate-500" aria-hidden="true" />
-                <span>{isManager ? "Team Attendance Roster" : "Live Roster"}</span>
+                <span>{isDepartmentHead ? "Team Attendance Roster" : "Live Roster"}</span>
               </Link>
             )}
 
-            {/* Shared Scorecards & Reports (HR, CEO, Super Admin) */}
-            {(isHRAdmin || isExecutive || isSuperAdmin) && (
+            {/* Scorecards & Reports */}
+            {!isStaff && (
               <Link
                 href="/admin/reports"
                 className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors"
@@ -108,8 +130,19 @@ export async function Navbar() {
               </Link>
             )}
 
-            {/* Super Admin Technical Administration (Excluded from routine approvals) */}
-            {isSuperAdmin && (
+            {/* Department Administration (HR Officer & System Admin, Decision D14) */}
+            {(isHROfficer || isSystemAdmin) && (
+              <Link
+                href="/admin/departments"
+                className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors"
+              >
+                <Building2 className="h-4 w-4 text-slate-500" aria-hidden="true" />
+                <span>Departments</span>
+              </Link>
+            )}
+
+            {/* System Administrator Technical Controls */}
+            {isSystemAdmin && (
               <Link
                 href="/admin/settings"
                 className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-slate-700 hover:bg-slate-100 hover:text-slate-900 transition-colors"

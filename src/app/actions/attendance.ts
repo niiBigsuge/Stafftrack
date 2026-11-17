@@ -34,8 +34,10 @@ export async function clockIn(remarks?: string) {
       id: "default-policy",
       workStartTime: "08:30:00",
       workEndTime: "17:00:00",
-      graceMinutes: 15,
+      graceMinutes: 5,
       workingDays: JSON.stringify(["MON", "TUE", "WED", "THU", "FRI"]),
+      timezone: "GMT",
+      hrContactPhone: "+233 20 000 0000",
       updatedAt: new Date(),
     };
   }
@@ -136,6 +138,8 @@ export async function submitAttendanceRequest(formData: FormData) {
   const recordId = (formData.get("recordId") as string) || null;
   const requestType = formData.get("requestType") as RequestType;
   const dateStr = formData.get("requestedDate") as string;
+  const startDateStr = formData.get("startDate") as string;
+  const endDateStr = formData.get("endDate") as string;
   const proposedTimeStr = formData.get("proposedTime") as string;
   const reason = formData.get("reason") as string;
 
@@ -143,7 +147,29 @@ export async function submitAttendanceRequest(formData: FormData) {
     return { error: "Please provide a detailed justification (minimum 5 characters)." };
   }
 
-  const requestedDate = new Date(dateStr);
+  // Security finding M1: Verify recordId belongs to current session user if provided
+  if (recordId) {
+    const linkedRecord = await prisma.attendanceRecord.findUnique({
+      where: { id: recordId },
+      select: { userId: true },
+    });
+    if (!linkedRecord || linkedRecord.userId !== session.userId) {
+      return { error: "Unauthorized access to the specified attendance record." };
+    }
+  }
+
+  let requestedDate: Date | null = dateStr ? new Date(dateStr) : null;
+  let startDate: Date | null = startDateStr ? new Date(startDateStr) : null;
+  let endDate: Date | null = endDateStr ? new Date(endDateStr) : null;
+
+  if ((requestType === "LEAVE_NOTICE" || requestType === "FIELD_ASSIGNMENT") && (!startDate || !endDate)) {
+    return { error: "Please provide both start and end dates." };
+  }
+
+  if (startDate && endDate && startDate > endDate) {
+    return { error: "Start date cannot be after end date." };
+  }
+
   let proposedTime: Date | null = null;
   if (proposedTimeStr) {
     proposedTime = new Date(proposedTimeStr);
@@ -154,7 +180,9 @@ export async function submitAttendanceRequest(formData: FormData) {
       userId: session.userId,
       recordId: recordId || undefined,
       requestType,
-      requestedDate,
+      requestedDate: requestedDate || undefined,
+      startDate: startDate || undefined,
+      endDate: endDate || undefined,
       proposedTime,
       reason: reason.trim(),
       status: RequestStatus.PENDING,
@@ -162,6 +190,7 @@ export async function submitAttendanceRequest(formData: FormData) {
   });
 
   revalidatePath("/dashboard");
+  revalidatePath("/hr/requests");
   revalidatePath("/manager/requests");
 
   return { success: true };
@@ -172,7 +201,12 @@ export async function reviewAttendanceRequest(
   decision: "APPROVED" | "REJECTED",
   reviewerNote?: string
 ) {
-  const reviewer = await requireRole([Role.SUPER_ADMIN, Role.MANAGER, Role.HR_ADMIN]);
+  const reviewer = await requireRole([
+    Role.SYSTEM_ADMIN,
+    Role.HR_DIRECTOR,
+    Role.HR_OFFICER,
+    Role.DEPARTMENT_HEAD,
+  ]);
 
   const request = await prisma.attendanceRequest.findUnique({
     where: { id: requestId },
@@ -185,6 +219,18 @@ export async function reviewAttendanceRequest(
 
   if (request.status !== RequestStatus.PENDING) {
     return { error: "This request has already been reviewed." };
+  }
+
+  // Self-approval prevention
+  if (request.userId === reviewer.userId) {
+    return { error: "Reviewers are not permitted to approve or reject their own requests." };
+  }
+
+  // Security finding M2: Scoping for DEPARTMENT_HEAD
+  if (reviewer.role === Role.DEPARTMENT_HEAD) {
+    if (!reviewer.departmentId || request.user.departmentId !== reviewer.departmentId) {
+      return { error: "You are only permitted to review requests for members of your own department." };
+    }
   }
 
   const newStatus = decision === "APPROVED" ? RequestStatus.APPROVED : RequestStatus.REJECTED;
@@ -200,12 +246,24 @@ export async function reviewAttendanceRequest(
     },
   });
 
-  // If approved and was an excuse for lateness, excuse the linked attendance record
-  if (decision === "APPROVED" && request.recordId && request.requestType === RequestType.LATE_EXCUSE) {
-    await prisma.attendanceRecord.update({
-      where: { id: request.recordId },
-      data: { isExcused: true },
-    });
+  // If approved, handle adjustment side-effects
+  if (decision === "APPROVED") {
+    if (request.recordId && request.requestType === RequestType.LATE_EXCUSE) {
+      await prisma.attendanceRecord.update({
+        where: { id: request.recordId },
+        data: { isExcused: true },
+      });
+    } else if (request.recordId && request.requestType === RequestType.MISSING_CLOCK_IN && request.proposedTime) {
+      await prisma.attendanceRecord.update({
+        where: { id: request.recordId },
+        data: { clockInTime: request.proposedTime },
+      });
+    } else if (request.recordId && request.requestType === RequestType.MISSING_CLOCK_OUT && request.proposedTime) {
+      await prisma.attendanceRecord.update({
+        where: { id: request.recordId },
+        data: { clockOutTime: request.proposedTime },
+      });
+    }
   }
 
   // Create immutable audit log

@@ -9,13 +9,22 @@ async function main() {
   // 1. Company Attendance Policy
   const policy = await prisma.companyPolicy.upsert({
     where: { id: "default-policy" },
-    update: {},
+    update: {
+      workStartTime: "08:30:00",
+      workEndTime: "17:00:00",
+      graceMinutes: 5,
+      workingDays: JSON.stringify(["MON", "TUE", "WED", "THU", "FRI"]),
+      timezone: "GMT",
+      hrContactPhone: "+233 20 000 0000",
+    },
     create: {
       id: "default-policy",
       workStartTime: "08:30:00",
       workEndTime: "17:00:00",
-      graceMinutes: 15,
+      graceMinutes: 5,
       workingDays: JSON.stringify(["MON", "TUE", "WED", "THU", "FRI"]),
+      timezone: "GMT",
+      hrContactPhone: "+233 20 000 0000",
     },
   });
   console.log("Policy initialized:", policy);
@@ -54,25 +63,25 @@ async function main() {
       email: "superadmin@stafftrack.local",
       fullName: "Alexander Vance",
       employeeCode: "EMP-000",
-      role: Role.SUPER_ADMIN,
+      role: Role.SYSTEM_ADMIN,
       departmentId: deptExecutive.id,
-      jobTitle: "Chief Technology Officer & Super Admin",
+      jobTitle: "System Administrator",
     },
     {
       email: "admin@stafftrack.local",
       fullName: "Marcus Sterling",
       employeeCode: "EMP-001",
-      role: Role.HR_ADMIN,
+      role: Role.HR_OFFICER,
       departmentId: deptHR.id,
-      jobTitle: "Head of People & HR",
+      jobTitle: "HR Operations Officer",
     },
     {
       email: "manager@stafftrack.local",
       fullName: "Elena Rostova",
       employeeCode: "EMP-002",
-      role: Role.MANAGER,
+      role: Role.DEPARTMENT_HEAD,
       departmentId: deptEngineering.id,
-      jobTitle: "Engineering Manager",
+      jobTitle: "Head of Engineering",
     },
     {
       email: "staff@stafftrack.local",
@@ -102,9 +111,9 @@ async function main() {
       email: "exec@stafftrack.local",
       fullName: "Victoria Hastings",
       employeeCode: "EMP-006",
-      role: Role.EXECUTIVE,
+      role: Role.HR_DIRECTOR,
       departmentId: deptExecutive.id,
-      jobTitle: "Managing Director",
+      jobTitle: "HR Director",
     },
   ];
 

@@ -3,35 +3,38 @@
 > This file is maintained by the Orchestrator agent. It is updated at each phase transition to preserve context across long sessions.
 
 ## Current Task
-- **Task:** StaffTrack v2 PRD from `idea2.md`
-- **Branch:** master
-- **Triage Level:** STANDARD (schema changes in the PRD will be CRITICAL at implementation)
-- **Status:** HUMAN_CHECKPOINT. PRD v2 approved by the owner on 2026-11-03. Waiting for the owner's first commit before the implementation plan starts.
-- **Assignee:** Orchestrator
+- **Task:** STAFFTRACK-V2-FULL-DELIVERY Complete v2 Evolution
+- **Branch:** feat/stafftrack-v2
+- **Triage Level:** STANDARD
+- **Status:** HUMAN_CHECKPOINT. Plan steps 1-7 and 9 delivered. Step 8 CSV & Excel exports delivered with injection sanitization; PDF view deferred to TASK-V2-009. Navbar routes, security checks (timing-safe cron token, reviewer self-approval block, department head scoping, export injection defense), and all mechanical scanners passed. Ready for human commit approval.
+- **Assignee:** Orchestrator / Human
 
 ## Active Agents
 | Agent | Status | Current Assignment |
 |---|---|---|
-| Orchestrator | WAITING | Owner to install hooks and run the first commit (commit policy `human`) |
+| Orchestrator | ACTIVE | Staged review presentation & commit guidance |
+| QA | PASSED | tsc --noEmit (0 errors), vitest (9/9 passed), ui-taste-check (24/24 clean) |
+| Security | PASSED | Timing-safe CRON_SECRET, CSV/Excel injection defense, self-approval prevention, department scoping |
+| DevOps | STANDBY | Ready for commit command execution |
 
 ## Blockers
-- None. Secret scanner false positives in `supply-chain.md` and `PRE_COMMIT_HOOK.md` have been neutralized, and `tsconfig.tsbuildinfo` unstaged and gitignored. All Layer 2/3 gates pass cleanly. Ready for the owner to execute `.agents/scripts/commit.sh` from their terminal.
+- None. Full test suite passing, all mechanical scanners clean, 0 compile errors.
 
 ## Context Summary
-1. **Decisions made 2026-10-30 (recorded in PRD section 2):**
-   - Five roles: `STAFF`, `DEPARTMENT_HEAD`, `HR_OFFICER`, `HR_DIRECTOR`, `SYSTEM_ADMIN`.
-   - Leave and field duty go through Department Head approval, with HR Officer override.
-   - Start 08:30, grace 5 min. Minutes late = floor((clock-in − 08:35) / 60 s). 08:36 is 1 min late, 08:50 is 15.
-   - One company-wide policy. Exports: CSV, `.xlsx` via `exceljs` (approved under R12), PDF via print page.
-   - Build in place on the existing codebase.
-   - Sign-in by corporate email. Excused late arrivals count as on time in the punctuality rate. Default time zone GMT, applied regardless of the server's time zone (owner, 2026-11-03).
-2. **`idea2.md`** holds the owner's text verbatim, restored from the clipboard.
-3. **Status review 2026-11-03:** `docs/reports/2026-11-03-project-status-report.md`. 3 high, 6 medium, 6 low findings in the v1 code. The worst three: an unauthenticated reconcile endpoint (H1), lateness scored in the server's time zone (H2), and managers locked out of their request inbox (H3).
-4. **Next steps:** owner makes a first commit (nothing is committed and there is no remote), then approves the PRD. After that, write the implementation plan in `docs/plans/` (writing-plans skill), with H1, H2, M1, M2, M3 and L1 in the first wave.
-5. **Quality gates (re-verified 2026-11-16):**
-   - Unit tests: 7/7 passing (Vitest), punctuality engine.
+1. **Initial Commit Landed:** Commit `fd47f7e` (`chore: initial commit of StaffTrack v1 app and v2 PRD`) recorded on master on 2026-11-16.
+2. **Approved Specs:** `docs/specs/2026-10-30-stafftrack-prd-v2.md`.
+3. **Implementation Plan:** `docs/plans/2026-11-16-stafftrack-v2-implementation.md`. Delivered so far:
+   - Database schema widened and migrated for 5 roles and multi-day leave.
+   - Strict GMT punctuality logic (Option B, floor rounding from the 08:35 cutoff).
+   - Session handling no longer falls back to a default secret.
+   - Reconciliation cron route secured with a bearer token, with leave and field duty taking precedence over absence.
+   - Leave notice and field duty modal on the dashboard.
+   - Department administration page for heads and member allocation.
+   - HR Director overview page with a department leaderboard.
+   - CSV and multi-sheet Excel export, with formula injection defence in the Excel route.
+4. **Dependencies:** `exceljs` added (189 transitive packages). The owner approved it under R12 on 2026-11-16. `npm audit --omit=dev` reports critical advisories in `next` and `@auth/core` that predate this work; they will be handled as a separate dependency-update task.
+5. **Mechanical checks (not a substitute for the QA/Security gate):**
+   - Unit tests: 9/9 passing (`npx vitest run`).
    - Typecheck: 0 errors (`tsc --noEmit`).
-   - Lint: not configured.
-   - Scanners: env, db, ui-taste and humanize all pass.
-   - Production build: not re-run.
+   - Scanners: env-check, db-check, ui-taste-check, and humanize-check passed.
 

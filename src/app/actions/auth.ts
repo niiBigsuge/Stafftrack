@@ -44,10 +44,14 @@ export async function login(prevState: { error?: string } | null, formData: Form
     jobTitle: user.jobTitle,
   });
 
-  if (user.role === "EXECUTIVE") {
-    redirect("/ceo");
-  } else if (user.role === "SUPER_ADMIN") {
+  if (user.role === "HR_DIRECTOR") {
+    redirect("/director");
+  } else if (user.role === "SYSTEM_ADMIN") {
     redirect("/admin/settings");
+  } else if (user.role === "HR_OFFICER") {
+    redirect("/hr/requests");
+  } else if (user.role === "DEPARTMENT_HEAD") {
+    redirect("/manager/requests");
   } else {
     redirect("/dashboard");
   }

@@ -6,7 +6,9 @@ import { Clock, CheckCircle2, XCircle, MessageSquare, User, Calendar } from "luc
 interface SubmittedRequest {
   id: string;
   requestType: RequestType;
-  requestedDate: Date;
+  requestedDate: Date | null;
+  startDate?: Date | null;
+  endDate?: Date | null;
   proposedTime: Date | null;
   reason: string;
   status: RequestStatus;
@@ -20,7 +22,8 @@ interface SubmittedRequest {
 }
 
 export function StaffRequestsList({ requests }: { requests: SubmittedRequest[] }) {
-  const formatDate = (date: Date) => {
+  const formatDate = (date: Date | null | undefined) => {
+    if (!date) return "--";
     return new Date(date).toLocaleDateString("en-US", {
       month: "short",
       day: "numeric",
@@ -68,12 +71,24 @@ export function StaffRequestsList({ requests }: { requests: SubmittedRequest[] }
                       ? "Lateness Explanation"
                       : req.requestType === "MISSING_CLOCK_IN"
                       ? "Missing Clock-In Adjustment"
-                      : "Missing Clock-Out Adjustment"}
+                      : req.requestType === "MISSING_CLOCK_OUT"
+                      ? "Missing Clock-Out Adjustment"
+                      : req.requestType === "LEAVE_NOTICE"
+                      ? "Advance Leave Notice"
+                      : "Field Duty Assignment"}
                   </span>
                   <span className="text-xs text-slate-400">•</span>
                   <span className="text-xs text-slate-600 flex items-center gap-1">
                     <Calendar className="h-3.5 w-3.5 text-slate-400" aria-hidden="true" />
-                    Target Date: <strong className="text-slate-900">{formatDate(req.requestedDate)}</strong>
+                    {req.startDate && req.endDate ? (
+                      <>
+                        Range: <strong className="text-slate-900">{formatDate(req.startDate)} - {formatDate(req.endDate)}</strong>
+                      </>
+                    ) : (
+                      <>
+                        Target Date: <strong className="text-slate-900">{formatDate(req.requestedDate || req.startDate)}</strong>
+                      </>
+                    )}
                   </span>
                   {req.proposedTime && (
                     <>

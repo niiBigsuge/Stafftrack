@@ -4,7 +4,7 @@ import { Role } from "@prisma/client";
 import { History, ShieldCheck, User } from "lucide-react";
 
 export default async function HRAuditPage() {
-  await requireRole([Role.HR_ADMIN, Role.SUPER_ADMIN]);
+  await requireRole([Role.HR_OFFICER, Role.HR_DIRECTOR, Role.SYSTEM_ADMIN]);
 
   const auditLogs = await prisma.auditLog.findMany({
     include: { actor: true },

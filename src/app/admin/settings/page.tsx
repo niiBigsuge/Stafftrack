@@ -4,7 +4,7 @@ import { Role } from "@prisma/client";
 import { AdminSettingsView } from "@/components/AdminSettingsView";
 
 export default async function AdminSettingsPage() {
-  await requireRole([Role.SUPER_ADMIN]);
+  await requireRole([Role.SYSTEM_ADMIN]);
 
   // 1. Policy
   let policy = await prisma.companyPolicy.findFirst();
@@ -13,8 +13,10 @@ export default async function AdminSettingsPage() {
       id: "default-policy",
       workStartTime: "08:30:00",
       workEndTime: "17:00:00",
-      graceMinutes: 15,
+      graceMinutes: 5,
       workingDays: JSON.stringify(["MON", "TUE", "WED", "THU", "FRI"]),
+      timezone: "GMT",
+      hrContactPhone: "+233 20 000 0000",
       updatedAt: new Date(),
     };
   }

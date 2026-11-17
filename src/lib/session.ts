@@ -3,9 +3,11 @@ import { SignJWT, jwtVerify } from "jose";
 import { redirect } from "next/navigation";
 import { Role } from "@prisma/client";
 
-const SECRET_KEY = new TextEncoder().encode(
-  process.env.NEXTAUTH_SECRET || "stafftrack-servbay-local-secret-key-32chars"
-);
+const secret = process.env.NEXTAUTH_SECRET;
+if (!secret) {
+  throw new Error("CRITICAL SECURITY ERROR: NEXTAUTH_SECRET environment variable is not defined.");
+}
+const SECRET_KEY = new TextEncoder().encode(secret);
 
 const SESSION_COOKIE_NAME = "stafftrack_session";
 
