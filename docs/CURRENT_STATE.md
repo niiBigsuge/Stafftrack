@@ -3,22 +3,22 @@
 > This file is maintained by the Orchestrator agent. It is updated at each phase transition to preserve context across long sessions.
 
 ## Current Task
-- **Task:** TASK-STAFF-001 Staff Account Creation & Department Assignment Workflow
-- **Branch:** feat/staff-account-creation
+- **Task:** TASK-UI-005 Final Sidebar Label Polish & Personnel Ordering
+- **Branch:** feat/vertical-sidebar-layout
 - **Triage Level:** STANDARD
-- **Status:** HUMAN_CHECKPOINT — Staff account creation workflow delivered with validation, audit logging, and responsive UI. Ready for review and commit.
+- **Status:** HUMAN_CHECKPOINT — Sidebar items updated ('Workspace', 'Staff' before 'Departments') with HR Director access. All gates passed. Ready for commit.
 - **Assignee:** Orchestrator / Human
 
 ## Active Agents
 | Agent | Status | Current Assignment |
 |---|---|---|
 | Orchestrator | ACTIVE | Staged review presentation & commit guidance |
-| QA | PASSED | tsc --noEmit (0 errors), vitest (9/9 passed), ui-taste-check (25/25 clean) |
-| Security | PASSED | Password hashing via bcrypt, role escalation defense, unique constraints |
+| QA | PASSED | tsc --noEmit (0 errors), vitest (9/9 passed), ui-taste-check (31/31 clean) |
+| UI Designer | PASSED | Sidebar labels & navigation hierarchy polished |
 | DevOps | STANDBY | Ready for commit approval |
 
 ## Blockers
-- None. Clean branch branched from committed v2 baseline.
+- None. Clean branch created for vertical navigation upgrade.
 
 ## Blockers
 - None. Clean working tree on `feat/stafftrack-v2`.

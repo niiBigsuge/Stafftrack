@@ -14,12 +14,12 @@ const createStaffSchema = z.object({
   jobTitle: z.string().optional(),
   departmentId: z.string().optional(),
   role: z.nativeEnum(Role),
-  initialPassword: z.string().min(6, "Password must be at least 6 characters"),
+  initialPassword: z.string().min(4, "Password must be at least 4 characters"),
 });
 
 export async function createStaffAccount(formData: FormData) {
   try {
-    const session = await requireRole([Role.HR_OFFICER, Role.SYSTEM_ADMIN]);
+    const session = await requireRole([Role.HR_OFFICER, Role.HR_DIRECTOR, Role.SYSTEM_ADMIN]);
 
     const fullName = (formData.get("fullName") as string)?.trim();
     const email = (formData.get("email") as string)?.trim().toLowerCase();
@@ -28,7 +28,7 @@ export async function createStaffAccount(formData: FormData) {
     const departmentIdRaw = formData.get("departmentId") as string;
     const departmentId = departmentIdRaw && departmentIdRaw !== "none" ? departmentIdRaw : null;
     const roleInput = (formData.get("role") as string) || "STAFF";
-    const initialPassword = (formData.get("initialPassword") as string) || "devos123";
+    const initialPassword = (formData.get("initialPassword") as string) || "00000";
 
     // Auto-generate employee code if missing
     if (!employeeCode) {
@@ -224,7 +224,7 @@ export async function toggleUserStatus(userId: string) {
 }
 
 export async function createDepartment(name: string) {
-  const session = await requireRole([Role.HR_OFFICER, Role.SYSTEM_ADMIN]);
+  const session = await requireRole([Role.HR_OFFICER, Role.HR_DIRECTOR, Role.SYSTEM_ADMIN]);
 
   if (!name || name.trim().length < 2) {
     return { error: "Department name must be at least 2 characters." };
@@ -256,7 +256,7 @@ export async function createDepartment(name: string) {
 
 export async function updateDepartmentManager(departmentId: string, managerId: string | null) {
   try {
-    const session = await requireRole([Role.HR_OFFICER, Role.SYSTEM_ADMIN]);
+    const session = await requireRole([Role.HR_OFFICER, Role.HR_DIRECTOR, Role.SYSTEM_ADMIN]);
 
     const dept = await prisma.department.update({
       where: { id: departmentId },
@@ -283,7 +283,7 @@ export async function updateDepartmentManager(departmentId: string, managerId: s
 
 export async function assignUserDepartment(userId: string, departmentId: string | null) {
   try {
-    const session = await requireRole([Role.HR_OFFICER, Role.SYSTEM_ADMIN]);
+    const session = await requireRole([Role.HR_OFFICER, Role.HR_DIRECTOR, Role.SYSTEM_ADMIN]);
 
     const user = await prisma.user.update({
       where: { id: userId },

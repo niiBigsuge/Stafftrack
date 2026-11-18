@@ -54,8 +54,8 @@ async function main() {
     create: { name: "Executive Leadership" },
   });
 
-  // Common password hash for test accounts (Dev-OS universal password: devos123)
-  const passwordHash = await bcrypt.hash("devos123", 10);
+  // Common password hash for test accounts
+  const passwordHash = await bcrypt.hash("00000", 10);
 
   // 3. Demo Users
   const users = [

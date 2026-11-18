@@ -20,12 +20,14 @@
 ## Active Board
 
 ### [ HUMAN_CHECKPOINT ]
-- **TASK-STAFF-001:** Staff & Employee Account Creation Workflow (`src/app/actions/admin.ts`, `src/components/DepartmentsClientView.tsx`)
+- **TASK-UI-005:** Final Sidebar Label Polish & Personnel Ordering (`src/components/Sidebar.tsx`, `src/app/actions/admin.ts`, `src/app/admin/departments/page.tsx`, `src/app/admin/staff/page.tsx`)
   - Assignee: Human / Orchestrator
   - Delivered:
-    - Server action `createStaffAccount` in `src/app/actions/admin.ts` with Zod validation, role escalation defense, duplicate code/email prevention, `bcryptjs` password hashing, and immutable audit logging.
-    - Interactive Staff Account Creation form embedded directly inside `/admin/departments` (`DepartmentsClientView.tsx`) with instant department allocation, role selection, auto employee code generation, and credential feedback.
-  - Quality verification: tsc (0 errors), vitest (9/9 pass), ui-taste-check (25/25 clean), env-check (pass), humanizer (clean)
+    - Renamed "Staff Workspace" to **"Workspace"**.
+    - Renamed "Staff Accounts" to **"Staff"**.
+    - Re-ordered navigation so **"Staff"** appears before **"Departments"**.
+    - Enabled both "Staff" and "Departments" access for the **HR Director** role (`HR_DIRECTOR`, `HR_OFFICER`, and `SYSTEM_ADMIN`).
+    - Verified 0 compile errors, 9/9 passing tests, and clean Dev-OS quality audits.
 
 ### [ IN_PROGRESS ]
 *(none)*

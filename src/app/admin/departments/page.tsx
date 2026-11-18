@@ -5,7 +5,7 @@ import { DepartmentsClientView } from "@/components/DepartmentsClientView";
 import { Building2, ShieldCheck } from "lucide-react";
 
 export default async function AdminDepartmentsPage() {
-  await requireRole([Role.HR_OFFICER, Role.SYSTEM_ADMIN]);
+  await requireRole([Role.HR_OFFICER, Role.HR_DIRECTOR, Role.SYSTEM_ADMIN]);
 
   const departments = await prisma.department.findMany({
     include: {

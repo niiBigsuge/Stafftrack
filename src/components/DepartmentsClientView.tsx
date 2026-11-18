@@ -5,18 +5,15 @@ import {
   createDepartment,
   updateDepartmentManager,
   assignUserDepartment,
-  createStaffAccount,
 } from "@/app/actions/admin";
 import {
   Building2,
   Users,
   UserCheck,
-  UserPlus,
   Plus,
   CheckCircle2,
   AlertCircle,
   Briefcase,
-  Key,
 } from "lucide-react";
 
 interface DepartmentData {
@@ -55,48 +52,6 @@ export function DepartmentsClientView({
   const [feedback, setFeedback] = useState<{ error?: string; success?: string } | null>(
     null
   );
-
-  // New Staff Registration State
-  const [isRegisteringStaff, setIsRegisteringStaff] = useState(false);
-  const [newStaffFullName, setNewStaffFullName] = useState("");
-  const [newStaffEmail, setNewStaffEmail] = useState("");
-  const [newStaffCode, setNewStaffCode] = useState("");
-  const [newStaffJobTitle, setNewStaffJobTitle] = useState("");
-  const [newStaffDeptId, setNewStaffDeptId] = useState("none");
-  const [newStaffRole, setNewStaffRole] = useState("STAFF");
-  const [newStaffPassword, setNewStaffPassword] = useState("devos123");
-
-  const handleCreateStaff = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsRegisteringStaff(true);
-    setFeedback(null);
-
-    const formData = new FormData();
-    formData.append("fullName", newStaffFullName.trim());
-    formData.append("email", newStaffEmail.trim());
-    if (newStaffCode.trim()) formData.append("employeeCode", newStaffCode.trim());
-    if (newStaffJobTitle.trim()) formData.append("jobTitle", newStaffJobTitle.trim());
-    formData.append("departmentId", newStaffDeptId);
-    formData.append("role", newStaffRole);
-    formData.append("initialPassword", newStaffPassword);
-
-    const res = await createStaffAccount(formData);
-    if (res.error) {
-      setFeedback({ error: res.error });
-    } else {
-      setFeedback({
-        success: `Account created for ${newStaffFullName.trim()} (${newStaffEmail.trim()}). Credentials: Password="${newStaffPassword}".`,
-      });
-      setNewStaffFullName("");
-      setNewStaffEmail("");
-      setNewStaffCode("");
-      setNewStaffJobTitle("");
-      setNewStaffDeptId("none");
-      setNewStaffRole("STAFF");
-      setNewStaffPassword("devos123");
-    }
-    setIsRegisteringStaff(false);
-  };
 
   const handleCreateDept = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -157,157 +112,33 @@ export function DepartmentsClientView({
       )}
 
       {/* 1. Create New Department Form */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        {/* Department Creation Card */}
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-            <Building2 className="h-5 w-5 text-slate-700" aria-hidden="true" />
-            Create New Department
-          </h2>
-          <p className="mt-1 text-xs text-slate-500">
-            Establish an operational unit to group staff and route attendance workflows.
-          </p>
+      <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
+        <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
+          <Building2 className="h-5 w-5 text-slate-700" aria-hidden="true" />
+          Create New Department
+        </h2>
+        <p className="mt-1 text-xs text-slate-500">
+          Establish an operational unit to group staff and route attendance workflows.
+        </p>
 
-          <form onSubmit={handleCreateDept} className="mt-4 flex flex-col sm:flex-row gap-3">
-            <input
-              type="text"
-              required
-              placeholder="e.g. Finance & Accounting, Logistics"
-              value={newDeptName}
-              onChange={(e) => setNewDeptName(e.target.value)}
-              className="flex-1 rounded-lg border border-slate-300 py-2 px-3 text-xs text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
-            />
-            <button
-              type="submit"
-              disabled={isSubmitting}
-              className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-slate-900 px-5 py-2 text-xs font-semibold text-white shadow-sm hover:bg-slate-800 btn-tactile disabled:opacity-50 transition whitespace-nowrap"
-            >
-              <Plus className="h-4 w-4" aria-hidden="true" />
-              <span>{isSubmitting ? "Creating..." : "Add Department"}</span>
-            </button>
-          </form>
-        </div>
-
-        {/* Staff Account Registration Card */}
-        <div className="rounded-xl border border-slate-200 bg-white p-6 shadow-sm">
-          <h2 className="text-base font-bold text-slate-900 flex items-center gap-2">
-            <UserPlus className="h-5 w-5 text-slate-700" aria-hidden="true" />
-            Create Staff & Employee Account
-          </h2>
-          <p className="mt-1 text-xs text-slate-500">
-            Register new personnel with email, role, and immediate department placement.
-          </p>
-
-          <form onSubmit={handleCreateStaff} className="mt-4 space-y-3">
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-700 mb-1">Full Name</label>
-                <input
-                  type="text"
-                  required
-                  placeholder="e.g. Kwame Mensah"
-                  value={newStaffFullName}
-                  onChange={(e) => setNewStaffFullName(e.target.value)}
-                  className="w-full rounded-lg border border-slate-300 py-1.5 px-3 text-xs text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-700 mb-1">Work Email</label>
-                <input
-                  type="email"
-                  required
-                  placeholder="e.g. kmensah@stafftrack.local"
-                  value={newStaffEmail}
-                  onChange={(e) => setNewStaffEmail(e.target.value)}
-                  className="w-full rounded-lg border border-slate-300 py-1.5 px-3 text-xs text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-700 mb-1">Employee Code</label>
-                <input
-                  type="text"
-                  placeholder="Auto-generated if blank"
-                  value={newStaffCode}
-                  onChange={(e) => setNewStaffCode(e.target.value)}
-                  className="w-full rounded-lg border border-slate-300 py-1.5 px-3 text-xs text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-700 mb-1">Job Title</label>
-                <input
-                  type="text"
-                  placeholder="e.g. Software Engineer"
-                  value={newStaffJobTitle}
-                  onChange={(e) => setNewStaffJobTitle(e.target.value)}
-                  className="w-full rounded-lg border border-slate-300 py-1.5 px-3 text-xs text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
-                />
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-700 mb-1">Department</label>
-                <select
-                  value={newStaffDeptId}
-                  onChange={(e) => setNewStaffDeptId(e.target.value)}
-                  className="w-full rounded-lg border border-slate-300 py-1.5 px-2 text-xs text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
-                >
-                  <option value="none">-- Unassigned --</option>
-                  {departments.map((d) => (
-                    <option key={d.id} value={d.id}>
-                      {d.name}
-                    </option>
-                  ))}
-                </select>
-              </div>
-            </div>
-
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-1">
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-700 mb-1">System Role</label>
-                <select
-                  value={newStaffRole}
-                  onChange={(e) => setNewStaffRole(e.target.value)}
-                  className="w-full rounded-lg border border-slate-300 py-1.5 px-2 text-xs text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
-                >
-                  <option value="STAFF">Staff Member</option>
-                  <option value="DEPARTMENT_HEAD">Department Head</option>
-                  <option value="HR_OFFICER">HR Officer</option>
-                  <option value="HR_DIRECTOR">HR Director</option>
-                  <option value="SYSTEM_ADMIN">System Administrator</option>
-                </select>
-              </div>
-
-              <div>
-                <label className="block text-[11px] font-semibold text-slate-700 mb-1">Initial Password</label>
-                <div className="relative">
-                  <input
-                    type="text"
-                    required
-                    value={newStaffPassword}
-                    onChange={(e) => setNewStaffPassword(e.target.value)}
-                    className="w-full rounded-lg border border-slate-300 py-1.5 pl-8 pr-3 text-xs font-mono text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
-                  />
-                  <Key className="h-3.5 w-3.5 absolute left-2.5 top-2.5 text-slate-400" aria-hidden="true" />
-                </div>
-              </div>
-            </div>
-
-            <div className="flex justify-end pt-2">
-              <button
-                type="submit"
-                disabled={isRegisteringStaff}
-                className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-slate-900 px-5 py-2 text-xs font-semibold text-white shadow-sm hover:bg-slate-800 btn-tactile disabled:opacity-50 transition whitespace-nowrap"
-              >
-                <UserPlus className="h-4 w-4" aria-hidden="true" />
-                <span>{isRegisteringStaff ? "Registering Staff..." : "Register Staff Member"}</span>
-              </button>
-            </div>
-          </form>
-        </div>
+        <form onSubmit={handleCreateDept} className="mt-4 flex flex-col sm:flex-row gap-3">
+          <input
+            type="text"
+            required
+            placeholder="e.g. Finance & Accounting, Logistics, Quality Assurance"
+            value={newDeptName}
+            onChange={(e) => setNewDeptName(e.target.value)}
+            className="flex-1 rounded-lg border border-slate-300 py-2 px-3 text-xs text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900"
+          />
+          <button
+            type="submit"
+            disabled={isSubmitting}
+            className="inline-flex items-center justify-center gap-1.5 rounded-lg bg-slate-900 px-5 py-2 text-xs font-semibold text-white shadow-sm hover:bg-slate-800 btn-tactile disabled:opacity-50 transition"
+          >
+            <Plus className="h-4 w-4" aria-hidden="true" />
+            <span>{isSubmitting ? "Creating..." : "Add Department"}</span>
+          </button>
+        </form>
       </div>
 
       {/* 2. Existing Departments & Department Head Assignment */}

@@ -11,7 +11,7 @@ export default function LoginPage() {
 
   const setDemoCredentials = (demoEmail: string) => {
     setEmail(demoEmail);
-    setPassword("devos123");
+    setPassword("00000");
   };
 
   return (
@@ -146,7 +146,7 @@ export default function LoginPage() {
               <div className="text-slate-500 text-[11px]">Victoria Hastings</div>
             </button>
           </div>
-          <p className="mt-2 text-[11px] text-center text-slate-400">Default Password: <code>devos123</code></p>
+          <p className="mt-2 text-[11px] text-center text-slate-400">Default Password: <code>00000</code></p>
         </div>
       </div>
     </div>
