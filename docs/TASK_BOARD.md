@@ -30,7 +30,10 @@
     - Verified 0 compile errors, 9/9 passing tests, and clean Dev-OS quality audits.
 
 ### [ IN_PROGRESS ]
-*(none)*
+- **TASK-UI-006:** Top Profile Dropdown Trigger, Sign Out Label, Collapsible Sidebar & "Approvals" Navigation Label (`src/components/UserProfileDropdown.tsx`, `src/components/Sidebar.tsx`, `src/app/layout.tsx`)
+  - Assignee: Developer / UI Designer
+  - Plan: `docs/plans/2026-11-18-sidebar-profile-polish-plan.md`
+  - Scope: Icon-only dropdown trigger with small arrow, "Sign Out" button text, sidebar collapse/expand toggle, and rename "HR Approval Inbox" to "Approvals".
 
 ### [ QUEUED ]
 - **TASK-DEP-001:** Dependency update for critical `next` and `@auth/core` advisories (Researcher, Developer, Tester, Security)

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useState } from "react";
 import { LiveGmtClock } from "@/components/LiveGmtClock";
+import { useSidebar } from "@/components/SidebarContext";
 import {
   Clock,
   LayoutDashboard,
@@ -17,6 +18,8 @@ import {
   UserPlus,
   Menu,
   X,
+  ChevronLeft,
+  ChevronRight,
 } from "lucide-react";
 import type { Role } from "@/types";
 
@@ -36,6 +39,7 @@ interface SidebarProps {
 export function Sidebar({ session, departmentName }: SidebarProps) {
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const { isCollapsed, toggleCollapse } = useSidebar();
 
   if (!session) return null;
 
@@ -80,11 +84,11 @@ export function Sidebar({ session, departmentName }: SidebarProps) {
         ]
       : []),
 
-    // HR Officer Inbox
+    // HR Officer Inbox (renamed to Approvals)
     ...(isHROfficer
       ? [
           {
-            name: "HR Approval Inbox",
+            name: "Approvals",
             href: "/hr/requests",
             icon: Inbox,
           },
@@ -146,23 +150,114 @@ export function Sidebar({ session, departmentName }: SidebarProps) {
       : []),
   ];
 
-  const NavContent = (
+  const brandHref = isHRDirector
+    ? "/director"
+    : isSystemAdmin
+    ? "/admin/settings"
+    : isHROfficer
+    ? "/hr/requests"
+    : isDepartmentHead
+    ? "/manager/requests"
+    : "/dashboard";
+
+  // Content rendered inside Desktop Sidebar
+  const DesktopNavContent = (
+    <div className="flex h-full flex-col justify-between">
+      <div className="space-y-4">
+        {/* Brand Header & Collapse Toggle */}
+        <div
+          className={`flex items-center border-b border-slate-100 py-4 transition-all duration-200 ${
+            isCollapsed ? "flex-col gap-3 px-2 justify-center" : "justify-between px-4"
+          }`}
+        >
+          <Link
+            href={brandHref}
+            className={`flex items-center gap-2.5 min-w-0 ${
+              isCollapsed ? "justify-center" : ""
+            }`}
+            title="StaffTrack Attendance OS"
+          >
+            <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg bg-slate-900 text-white shadow-sm">
+              <Clock className="h-4 w-4" aria-hidden="true" />
+            </div>
+            {!isCollapsed && (
+              <div className="flex flex-col min-w-0">
+                <span className="text-sm font-bold tracking-tight text-slate-950 truncate">
+                  StaffTrack
+                </span>
+                <span className="text-[9px] font-medium uppercase tracking-wider text-slate-500">
+                  Attendance OS
+                </span>
+              </div>
+            )}
+          </Link>
+
+          {/* Desktop Sidebar Collapse Toggle Button */}
+          <button
+            type="button"
+            onClick={toggleCollapse}
+            className="flex h-7 w-7 items-center justify-center rounded-md border border-slate-200 text-slate-500 hover:bg-slate-100 hover:text-slate-900 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-slate-900 transition btn-tactile"
+            title={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+            aria-label={isCollapsed ? "Expand sidebar" : "Collapse sidebar"}
+          >
+            {isCollapsed ? (
+              <ChevronRight className="h-4 w-4" aria-hidden="true" />
+            ) : (
+              <ChevronLeft className="h-4 w-4" aria-hidden="true" />
+            )}
+          </button>
+        </div>
+
+        {/* Navigation Section */}
+        <div className={isCollapsed ? "px-2" : "px-3"}>
+          {!isCollapsed && (
+            <div className="px-3 mb-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
+              Pages
+            </div>
+          )}
+          <nav className="space-y-1">
+            {navLinks.map((item) => {
+              const Icon = item.icon;
+              const isActive = pathname === item.href;
+              return (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  title={isCollapsed ? item.name : undefined}
+                  className={`flex items-center rounded-lg text-xs font-semibold transition ${
+                    isCollapsed
+                      ? "justify-center p-2.5"
+                      : "gap-3 px-3 py-2"
+                  } ${
+                    isActive
+                      ? "bg-slate-900 text-white shadow-sm"
+                      : "text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                  }`}
+                >
+                  <Icon
+                    className={`h-4 w-4 shrink-0 ${
+                      isActive ? "text-white" : "text-slate-500"
+                    }`}
+                    aria-hidden="true"
+                  />
+                  {!isCollapsed && <span className="truncate">{item.name}</span>}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+      </div>
+    </div>
+  );
+
+  // Content rendered inside Mobile Drawer (Always fully expanded)
+  const MobileNavContent = (
     <div className="flex h-full flex-col justify-between">
       <div className="space-y-6">
         {/* Brand Header */}
         <div className="flex items-center justify-between border-b border-slate-100 px-6 py-5">
           <Link
-            href={
-              isHRDirector
-                ? "/director"
-                : isSystemAdmin
-                ? "/admin/settings"
-                : isHROfficer
-                ? "/hr/requests"
-                : isDepartmentHead
-                ? "/manager/requests"
-                : "/dashboard"
-            }
+            href={brandHref}
             onClick={() => setMobileOpen(false)}
             className="flex items-center gap-3"
           >
@@ -250,14 +345,18 @@ export function Sidebar({ session, departmentName }: SidebarProps) {
             onClick={() => setMobileOpen(false)}
           />
           <div className="relative flex w-72 max-w-[80%] flex-1 flex-col bg-white shadow-xl">
-            {NavContent}
+            {MobileNavContent}
           </div>
         </div>
       )}
 
       {/* Desktop Persistent Vertical Sidebar */}
-      <aside className="no-print fixed inset-y-0 left-0 z-30 hidden w-64 border-r border-slate-200 bg-white md:block">
-        {NavContent}
+      <aside
+        className={`no-print fixed inset-y-0 left-0 z-30 hidden border-r border-slate-200 bg-white transition-all duration-200 ease-in-out md:block ${
+          isCollapsed ? "w-16" : "w-64"
+        }`}
+      >
+        {DesktopNavContent}
       </aside>
     </>
   );

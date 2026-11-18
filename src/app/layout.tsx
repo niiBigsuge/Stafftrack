@@ -4,6 +4,8 @@ import { getSession } from "@/lib/session";
 import { prisma } from "@/lib/prisma";
 import { Sidebar } from "@/components/Sidebar";
 import { TopHeader } from "@/components/TopHeader";
+import { SidebarProvider } from "@/components/SidebarContext";
+import { DashboardContainer } from "@/components/DashboardContainer";
 
 export const metadata: Metadata = {
   title: "StaffTrack — Corporate Staff Attendance & Punctuality",
@@ -30,13 +32,14 @@ export default async function RootLayout({
     <html lang="en">
       <body className="min-h-screen bg-slate-50 text-slate-900 antialiased selection:bg-slate-900 selection:text-white">
         {session ? (
-          <div className="min-h-screen flex flex-col md:flex-row">
-            <Sidebar session={session} departmentName={departmentName} />
-            <div className="flex-1 md:pl-64 flex flex-col min-w-0">
-              <TopHeader />
-              <main className="flex-1">{children}</main>
-            </div>
-          </div>
+          <SidebarProvider>
+            <DashboardContainer
+              sidebar={<Sidebar session={session} departmentName={departmentName} />}
+              topHeader={<TopHeader />}
+            >
+              {children}
+            </DashboardContainer>
+          </SidebarProvider>
         ) : (
           <main>{children}</main>
         )}
