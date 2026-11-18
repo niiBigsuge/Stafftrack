@@ -20,15 +20,12 @@
 ## Active Board
 
 ### [ HUMAN_CHECKPOINT ]
-*(none)*
-
-### [ HUMAN_CHECKPOINT ]
-- **STAFFTRACK-V2-MERGE-REVIEW:** Final review of `feat/stafftrack-v2` ahead of merge into `master`.
-  - Commits:
-    - `09f0922`: `feat: StaffTrack v2 5-tier roles, GMT punctuality, leave workflow, and multi-format exports`
-    - `43bed6c`: `feat: add executive printable PDF report view and print stylesheet`
-  - Total changes: 36 files (+4,548 / -705 lines)
-  - Gates: tsc (0 errors), vitest (9/9 pass), all mechanical checks clean
+- **TASK-STAFF-001:** Staff & Employee Account Creation Workflow (`src/app/actions/admin.ts`, `src/components/DepartmentsClientView.tsx`)
+  - Assignee: Human / Orchestrator
+  - Delivered:
+    - Server action `createStaffAccount` in `src/app/actions/admin.ts` with Zod validation, role escalation defense, duplicate code/email prevention, `bcryptjs` password hashing, and immutable audit logging.
+    - Interactive Staff Account Creation form embedded directly inside `/admin/departments` (`DepartmentsClientView.tsx`) with instant department allocation, role selection, auto employee code generation, and credential feedback.
+  - Quality verification: tsc (0 errors), vitest (9/9 pass), ui-taste-check (25/25 clean), env-check (pass), humanizer (clean)
 
 ### [ IN_PROGRESS ]
 *(none)*

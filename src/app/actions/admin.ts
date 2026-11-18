@@ -4,6 +4,123 @@ import { prisma } from "@/lib/prisma";
 import { requireRole } from "@/lib/session";
 import { Role } from "@prisma/client";
 import { revalidatePath } from "next/cache";
+import bcrypt from "bcryptjs";
+import { z } from "zod";
+
+const createStaffSchema = z.object({
+  fullName: z.string().min(2, "Full name must be at least 2 characters"),
+  email: z.string().email("Invalid email address"),
+  employeeCode: z.string().min(3, "Employee code must be at least 3 characters"),
+  jobTitle: z.string().optional(),
+  departmentId: z.string().optional(),
+  role: z.nativeEnum(Role),
+  initialPassword: z.string().min(6, "Password must be at least 6 characters"),
+});
+
+export async function createStaffAccount(formData: FormData) {
+  try {
+    const session = await requireRole([Role.HR_OFFICER, Role.SYSTEM_ADMIN]);
+
+    const fullName = (formData.get("fullName") as string)?.trim();
+    const email = (formData.get("email") as string)?.trim().toLowerCase();
+    let employeeCode = (formData.get("employeeCode") as string)?.trim();
+    const jobTitle = (formData.get("jobTitle") as string)?.trim() || null;
+    const departmentIdRaw = formData.get("departmentId") as string;
+    const departmentId = departmentIdRaw && departmentIdRaw !== "none" ? departmentIdRaw : null;
+    const roleInput = (formData.get("role") as string) || "STAFF";
+    const initialPassword = (formData.get("initialPassword") as string) || "devos123";
+
+    // Auto-generate employee code if missing
+    if (!employeeCode) {
+      const count = await prisma.user.count();
+      employeeCode = `EMP-${String(count + 1).padStart(3, "0")}`;
+    }
+
+    const validated = createStaffSchema.safeParse({
+      fullName,
+      email,
+      employeeCode,
+      jobTitle: jobTitle || undefined,
+      departmentId: departmentId || undefined,
+      role: roleInput as Role,
+      initialPassword,
+    });
+
+    if (!validated.success) {
+      return { error: validated.error.errors[0].message };
+    }
+
+    // Role Escalation Protection: Only SYSTEM_ADMIN can provision another SYSTEM_ADMIN
+    if (validated.data.role === Role.SYSTEM_ADMIN && session.role !== Role.SYSTEM_ADMIN) {
+      return { error: "Only System Administrators are permitted to create admin accounts." };
+    }
+
+    // Check unique email
+    const existingEmail = await prisma.user.findUnique({ where: { email } });
+    if (existingEmail) {
+      return { error: "An employee account with this email already exists." };
+    }
+
+    // Check unique employee code
+    const existingCode = await prisma.user.findUnique({ where: { employeeCode } });
+    if (existingCode) {
+      return { error: "An employee account with this employee code already exists." };
+    }
+
+    // Hash password
+    const passwordHash = await bcrypt.hash(initialPassword, 10);
+
+    const newUser = await prisma.user.create({
+      data: {
+        fullName,
+        email,
+        employeeCode,
+        passwordHash,
+        role: validated.data.role,
+        departmentId,
+        jobTitle,
+        isActive: true,
+      },
+      include: { department: true },
+    });
+
+    await prisma.auditLog.create({
+      data: {
+        actorId: session.userId,
+        action: "CREATE_STAFF_ACCOUNT",
+        targetEntity: "User",
+        targetId: newUser.id,
+        details: JSON.stringify({
+          fullName: newUser.fullName,
+          email: newUser.email,
+          employeeCode: newUser.employeeCode,
+          role: newUser.role,
+          department: newUser.department?.name || "Unassigned",
+        }),
+      },
+    });
+
+    revalidatePath("/admin/departments");
+    revalidatePath("/admin/settings");
+    revalidatePath("/admin/live-board");
+    revalidatePath("/admin/reports");
+    revalidatePath("/director");
+
+    return {
+      success: true,
+      user: {
+        id: newUser.id,
+        fullName: newUser.fullName,
+        email: newUser.email,
+        employeeCode: newUser.employeeCode,
+        role: newUser.role,
+        department: newUser.department?.name || "Unassigned",
+      },
+    };
+  } catch (err: any) {
+    return { error: err.message || "Failed to create staff account." };
+  }
+}
 
 export async function updateCompanyPolicy(formData: FormData) {
   const session = await requireRole([Role.HR_OFFICER, Role.SYSTEM_ADMIN]);
