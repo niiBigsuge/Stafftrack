@@ -19,24 +19,15 @@
 
 ## Active Board
 
-### [ HUMAN_CHECKPOINT ]
-- **TASK-UI-005:** Final Sidebar Label Polish & Personnel Ordering (`src/components/Sidebar.tsx`, `src/app/actions/admin.ts`, `src/app/admin/departments/page.tsx`, `src/app/admin/staff/page.tsx`)
-  - Assignee: Human / Orchestrator
-  - Delivered:
-    - Renamed "Staff Workspace" to **"Workspace"**.
-    - Renamed "Staff Accounts" to **"Staff"**.
-    - Re-ordered navigation so **"Staff"** appears before **"Departments"**.
-    - Enabled both "Staff" and "Departments" access for the **HR Director** role (`HR_DIRECTOR`, `HR_OFFICER`, and `SYSTEM_ADMIN`).
-    - Verified 0 compile errors, 9/9 passing tests, and clean Dev-OS quality audits.
-
 ### [ IN_PROGRESS ]
-- **TASK-UI-006:** Top Profile Dropdown Trigger, Sign Out Label, Collapsible Sidebar & "Approvals" Navigation Label (`src/components/UserProfileDropdown.tsx`, `src/components/Sidebar.tsx`, `src/app/layout.tsx`)
-  - Assignee: Developer / UI Designer
-  - Plan: `docs/plans/2026-11-18-sidebar-profile-polish-plan.md`
-  - Scope: Icon-only dropdown trigger with small arrow, "Sign Out" button text, sidebar collapse/expand toggle, and rename "HR Approval Inbox" to "Approvals".
+*(none)*
 
 ### [ QUEUED ]
 - **TASK-DEP-001:** Dependency update for critical `next` and `@auth/core` advisories (Researcher, Developer, Tester, Security)
+
+### [ DONE ]
+- **TASK-UI-006:** Top Profile Dropdown Trigger, Sign Out Label, Collapsible Sidebar & "Approvals" Navigation Label (`src/components/UserProfileDropdown.tsx`, `src/components/Sidebar.tsx`, `src/app/layout.tsx`). Landed under commit `51c6df1`.
+- **TASK-UI-005:** Final Sidebar Label Polish & Personnel Ordering (`src/components/Sidebar.tsx`, `src/app/actions/admin.ts`, `src/app/admin/departments/page.tsx`, `src/app/admin/staff/page.tsx`). Landed under commit `825a0a8`.
 
 ### [ DONE ]
 - **TASK-V2-009:** Printable PDF Report View & Print Media Stylesheet (`src/app/admin/reports/page.tsx`, `src/components/PrintReportButton.tsx`, `src/app/globals.css`). Landed under commit `43bed6c`.
